@@ -6,10 +6,50 @@
   <title>Document</title>
   <style>
      body { 
-      font-family: 'Verdana"; 
-     background-color: #f8f8f8; text-align: center; margin: 40px;
-</head>
-<body>
-  
-</body>
-</html>
+      font-family: Arial, sans-serif;
+     background-color:#f8f8f8; text-align: center; 
+     margin: 40px; 
+     }
+      h1 {
+         color: #2e3a59;
+         background-color: #d9e3f0; 
+         padding: 15px; 
+         border-radius: 10px; 
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      button { 
+        background-color: #355c7d; 
+        color: white; 
+        padding: 12px 25px; 
+        border: none; border-radius: 8px;
+         cursor: pointer;
+         font-size: 16px;
+      }
+      button:hover { 
+        background-color: #6c5b7b; 
+      }
+      #message {
+         margin-top: 25px; 
+         font-size: 18px; 
+         color: #2e3a59;
+         font-weight: bold;
+      }
+      img { 
+        width: 500px; 
+        border-radius: 10px; 
+        margin-top: 20px;
+      }
+      </style>
+      </head>
+      <body> 
+      <h1>Welcome to Rajput Furniture Mall</h1> 
+      <img src="image copy 9.png" alt="Furniture Image"> 
+      <p>Click below to view today's special offer !</p> 
+        <button id="offerBtn">Show Offer</button>
+         <p id="message"></p>
+      <script>
+        document.getElementById("offerBtn").addEventListener("click", function() { 
+          document.getElementById("message").innerHTML = " 20% OFF on all Sofa Sets Today!";});
+         </script>
+      </body>
+      </html> 
