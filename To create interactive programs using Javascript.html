@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Furniture Mall — Interactive Demo</title>
+  <title>Furniture Mall — Interactive Demo (jQuery)</title>
   <style>
     :root{--accent:#6b5b95;--muted:#f5f5f7;--card:#ffffff;--danger:#e63946}
     *{box-sizing:border-box}
@@ -43,10 +43,12 @@
     .thumbs img.active{border-color:var(--accent)}
     @media(max-width:900px){.layout{grid-template-columns:1fr}.modal-card{grid-template-columns:1fr}}
   </style>
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
   <header>
-    <img src="image copy 3.png" alt="logo" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.12)">
+    <img src="image copy 10.png" alt="logo" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(117, 93, 131, 0.515)">
     <h1>Furniture Mall</h1>
     <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
       <div id="live-count" style="background:rgba(255,255,255,0.12);padding:6px 10px;border-radius:8px;font-weight:600">0 items</div>
@@ -129,23 +131,23 @@
     // Sample product data
     const PRODUCTS = [
       {id:1,title:'Elegant 3-Seater Sofa',category:'sofa',price:15999,desc:'Comfortable fabric sofa with modern wooden legs.',images:[
-        'https://images.unsplash.com/photo-1616627988422-2c57b2b6e0a6?q=80&w=1200&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1598300054739-38d83f3b1a1c?q=80&w=1200&auto=format&fit=crop'
+       ' https://imgs.search.brave.com/jq1ubLkwqxapFSi1zL-JhlkEUkjXAXyIK8V8qhvhm3g/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjF5dHNCU1MwM0wu/anBn',
+        'https://imgs.search.brave.com/jq1ubLkwqxapFSi1zL-JhlkEUkjXAXyIK8V8qhvhm3g/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjF5dHNCU1MwM0wu/anBn'
       ]},
       {id:2,title:'Minimal Wooden Chair',category:'chair',price:3499,desc:'Solid oak chair — sturdy and stylish.',images:[
         'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop'
       ]},
       {id:3,title:'Round Dining Table',category:'table',price:8999,desc:'Perfect for small dining areas, seats 4 comfortably.',images:[
-        'https://images.unsplash.com/photo-1567016432779-75ad2a89396b?q=80&w=1200&auto=format&fit=crop'
+        'https://imgs.search.brave.com/G-0_dXUidtb6L2Bio9RAphyXOb9jDjuO2WB50Qe3LgA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/cm95YWx6aWcuY29t/L3VwbG9hZHMvY2Fj/aGUvY2FjaGUtUmFk/bGV0dC1Nb2Rlcm4t/THV4dXJ5LTQtU2Vh/dGVyLVJvdW5kLURp/bmluZy1UYWJsZS5q/cGc'
       ]},
       {id:4,title:'King Size Bed',category:'bed',price:21999,desc:'Luxury king bed with storage drawers.',images:[
-        'https://images.unsplash.com/photo-1601933479221-8b6d7d8d3f4c?q=80&w=1200&auto=format&fit=crop'
+       'https://imgs.search.brave.com/gHtbHMuPtBaSZ8iN-cNbFNAG3ttJfB4yX9VvwD1GMpc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/ODFMNi04dXQ2MUwu/anBn'
       ]},
       {id:5,title:'Accent Armchair',category:'chair',price:4999,desc:'Velvet armchair that adds color to any room.',images:[
-        'image copy 3.png'
+        'https://imgs.search.brave.com/UhR2JdZiY90hbsr20EqpeZwutqJYku-P36RC99VO_Ng/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFjQ25TcUNYWEwu/anBn'
       ]},
       {id:6,title:'Coffee Table — Marble Top',category:'table',price:6799,desc:'Sleek marble top with metal legs.',images:[
-        'https://images.unsplash.com/photo-1598300054739-38d83f3b1a1c?q=80&w=1200&auto=format&fit=crop'
+        'https://imgs.search.brave.com/IrY-iGn3anw8o5Hi4fKeVJyArDjVsE8nm5a9oN5R06g/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/ODFrU3FqS0NSU0wu/anBn'
       ]}
     ];
 
@@ -158,119 +160,130 @@
     };
 
     // Helpers
-    const el = id => document.getElementById(id);
+    const $ = jQuery;
+    function formatPrice(n){ return n.toLocaleString('en-IN'); }
 
-    function formatPrice(n){return n.toLocaleString('en-IN')}
-
-    // Render products
+    // Render products (jQuery)
     function renderProducts(){
-      const container = el('products');
-      container.innerHTML = '';
-      const q = el('search').value.trim().toLowerCase();
-      const cat = el('category').value;
-      const maxPrice = +el('price').value;
-      let filtered = state.products.filter(p=>{
-        if(cat!=='all' && p.category!==cat) return false;
-        if(p.price>maxPrice) return false;
+      const $container = $('#products').empty();
+      const q = $('#search').val().trim().toLowerCase();
+      const cat = $('#category').val();
+      const maxPrice = +$('#price').val();
+
+      let filtered = state.products.filter(p => {
+        if(cat !== 'all' && p.category !== cat) return false;
+        if(p.price > maxPrice) return false;
         if(q && !(p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))) return false;
         return true;
       });
-      const sort = el('sort').value;
-      if(sort==='price-asc') filtered.sort((a,b)=>a.price-b.price);
-      if(sort==='price-desc') filtered.sort((a,b)=>b.price-a.price);
 
-      if(filtered.length===0){el('no-results').style.display='block';} else{el('no-results').style.display='none'}
+      const sort = $('#sort').val();
+      if(sort === 'price-asc') filtered.sort((a,b)=>a.price-b.price);
+      if(sort === 'price-desc') filtered.sort((a,b)=>b.price-a.price);
 
-      filtered.forEach(p=>{
-        const card = document.createElement('div'); card.className='card';
-        const thumb = document.createElement('div'); thumb.className='thumb'; thumb.style.backgroundImage=`url(${p.images[0]})`;
-        card.appendChild(thumb);
-        const t = document.createElement('h3'); t.className='title'; t.textContent = p.title; card.appendChild(t);
-        const d = document.createElement('div'); d.className='muted'; d.textContent = p.desc; card.appendChild(d);
-        const row = document.createElement('div'); row.className='row';
-        const price = document.createElement('div'); price.textContent = '₹ ' + formatPrice(p.price); row.appendChild(price);
-        const actions = document.createElement('div');
-        const view = document.createElement('button'); view.textContent='View'; view.onclick = ()=>openModal(p.id);
-        actions.appendChild(view);
-        row.appendChild(actions);
-        card.appendChild(row);
-        container.appendChild(card);
+      if(filtered.length === 0) { $('#no-results').show(); } else { $('#no-results').hide(); }
+
+      filtered.forEach(p => {
+        const $card = $('<div>').addClass('card');
+        const $thumb = $('<div>').addClass('thumb').css('background-image', `url(${p.images[0]})`);
+        const $title = $('<h3>').addClass('title').text(p.title);
+        const $desc = $('<div>').addClass('muted').text(p.desc);
+        const $row = $('<div>').addClass('row');
+        const $price = $('<div>').text('₹ ' + formatPrice(p.price));
+        const $actions = $('<div>');
+        const $view = $('<button>').text('View').on('click', ()=> openModal(p.id));
+        $actions.append($view);
+        $row.append($price, $actions);
+        $card.append($thumb, $title, $desc, $row);
+        $container.append($card);
       });
     }
 
-    // Cart functions
-    function saveCart(){localStorage.setItem('fm_cart',JSON.stringify(state.cart));}
-    function addToCart(id,qty=1){
+    // Cart functions (jQuery)
+    function saveCart(){ localStorage.setItem('fm_cart', JSON.stringify(state.cart)); }
+    function addToCart(id, qty = 1){
       state.cart[id] = (state.cart[id]||0) + qty;
       saveCart(); renderCart(); updateLiveCount();
     }
-    function removeFromCart(id){delete state.cart[id]; saveCart(); renderCart(); updateLiveCount();}
-    function clearCart(){state.cart={}; saveCart(); renderCart(); updateLiveCount();}
+    function removeFromCart(id){ delete state.cart[id]; saveCart(); renderCart(); updateLiveCount(); }
+    function clearCart(){ state.cart = {}; saveCart(); renderCart(); updateLiveCount(); }
 
     function renderCart(){
-      const list = el('cart-list'); list.innerHTML='';
+      const $list = $('#cart-list').empty();
       const ids = Object.keys(state.cart).map(Number);
-      if(ids.length===0){el('cart-empty').style.display='block'; el('cart-summary').style.display='none'; return}
-      el('cart-empty').style.display='none'; el('cart-summary').style.display='block';
-      let total=0;
-      ids.forEach(id=>{
-        const p = PRODUCTS.find(x=>x.id===id);
+      if(ids.length === 0){ $('#cart-empty').show(); $('#cart-summary').hide(); return; }
+      $('#cart-empty').hide(); $('#cart-summary').show();
+      let total = 0;
+      ids.forEach(id => {
+        const p = PRODUCTS.find(x => x.id === id);
         const q = state.cart[id];
-        total += p.price*q;
-        const row = document.createElement('div'); row.className='cart-item';
-        const img = document.createElement('img'); img.src=p.images[0]; row.appendChild(img);
-        const meta = document.createElement('div'); meta.style.flex='1';
-        meta.innerHTML = `<div style="font-weight:600">${p.title}</div><div class='muted'>₹ ${formatPrice(p.price)} x ${q}</div>`;
-        row.appendChild(meta);
-        const ctrl = document.createElement('div'); ctrl.style.display='flex'; ctrl.style.flexDirection='column'; ctrl.style.gap='6px';
-        const inc = document.createElement('button'); inc.textContent='+'; inc.onclick = ()=>{state.cart[id]++; saveCart(); renderCart(); updateLiveCount();};
-        const dec = document.createElement('button'); dec.textContent='-'; dec.onclick = ()=>{state.cart[id]--; if(state.cart[id]<=0) removeFromCart(id); else{saveCart(); renderCart(); updateLiveCount();}};
-        const del = document.createElement('button'); del.textContent='Remove'; del.className='ghost'; del.onclick = ()=>removeFromCart(id);
-        ctrl.appendChild(inc); ctrl.appendChild(dec); ctrl.appendChild(del);
-        row.appendChild(ctrl);
-        list.appendChild(row);
+        total += p.price * q;
+        const $row = $('<div>').addClass('cart-item');
+        const $img = $('<img>').attr('src', p.images[0]);
+        const $meta = $('<div>').css('flex','1').html(`<div style="font-weight:600">${p.title}</div><div class='muted'>₹ ${formatPrice(p.price)} x ${q}</div>`);
+        const $ctrl = $('<div>').css({display:'flex', flexDirection:'column', gap:'6px'});
+        const $inc = $('<button>').text('+').on('click', ()=> { state.cart[id]++; saveCart(); renderCart(); updateLiveCount(); });
+        const $dec = $('<button>').text('-').on('click', ()=> { state.cart[id]--; if(state.cart[id] <= 0) removeFromCart(id); else { saveCart(); renderCart(); updateLiveCount(); }});
+        const $del = $('<button>').text('Remove').addClass('ghost').on('click', ()=> removeFromCart(id));
+        $ctrl.append($inc, $dec, $del);
+        $row.append($img, $meta, $ctrl);
+        $list.append($row);
       });
-      el('cart-total').textContent = formatPrice(total);
+      $('#cart-total').text(formatPrice(total));
     }
 
     function updateLiveCount(){
       const count = Object.values(state.cart).reduce((s,n)=>s+n,0);
-      el('live-count').textContent = `${count} item${count!==1?'s':''}`;
+      $('#live-count').text(`${count} item${count !== 1 ? 's' : ''}`);
     }
 
-    // Modal
+    // Modal (jQuery)
     function openModal(id){
-      const p = PRODUCTS.find(x=>x.id===id); state.modalProduct = p; state.modalQty = 1;
-      el('modal-title').textContent = p.title; el('modal-desc').textContent = p.desc; el('modal-price').textContent = formatPrice(p.price);
-      el('qty').textContent = state.modalQty;
-      // images
-      const main = el('modal-main-img'); main.innerHTML = '';
-      const img = document.createElement('img'); img.src = p.images[0]; img.style.maxHeight='320px'; img.style.width='100%'; main.appendChild(img);
-      const thumbs = el('modal-thumbs'); thumbs.innerHTML = '';
-      p.images.forEach((src,idx)=>{ const t = document.createElement('img'); t.src=src; if(idx===0) t.classList.add('active'); t.onclick = ()=>{ main.querySelector('img').src = src; thumbs.querySelectorAll('img').forEach(x=>x.classList.remove('active')); t.classList.add('active'); } ; thumbs.appendChild(t); });
-      el('modal').classList.add('open'); el('modal').setAttribute('aria-hidden','false');
+      const p = PRODUCTS.find(x => x.id === id);
+      state.modalProduct = p; state.modalQty = 1;
+      $('#modal-title').text(p.title);
+      $('#modal-desc').text(p.desc);
+      $('#modal-price').text(formatPrice(p.price));
+      $('#qty').text(state.modalQty);
+
+      const $main = $('#modal-main-img').empty();
+      const $img = $('<img>').attr('src', p.images[0]).css({maxHeight:'320px', width:'100%'});
+      $main.append($img);
+
+      const $thumbs = $('#modal-thumbs').empty();
+      p.images.forEach((src, idx) => {
+        const $t = $('<img>').attr('src', src);
+        if(idx === 0) $t.addClass('active');
+        $t.on('click', function(){
+          $main.find('img').attr('src', src);
+          $thumbs.find('img').removeClass('active');
+          $(this).addClass('active');
+        });
+        $thumbs.append($t);
+      });
+
+      $('#modal').addClass('open').attr('aria-hidden','false').show();
     }
 
-    // Wire UI events
-    document.addEventListener('DOMContentLoaded',()=>{
-      el('search').addEventListener('input',renderProducts);
-      el('category').addEventListener('change',renderProducts);
-      el('sort').addEventListener('change',renderProducts);
-      el('price').addEventListener('input',renderProducts);
-      el('view-cart').addEventListener('click',()=>{window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})});
-      el('clear-cart').addEventListener('click',clearCart);
-      el('checkout').addEventListener('click',()=>{
-        if(Object.keys(state.cart).length===0){alert('Your cart is empty');return}
+    // Wire UI events (jQuery ready)
+    $(function(){
+      $('#search').on('input', renderProducts);
+      $('#category').on('change', renderProducts);
+      $('#sort').on('change', renderProducts);
+      $('#price').on('input', renderProducts);
+      $('#view-cart').on('click', ()=> { $('html,body').animate({scrollTop: $(document).height()}, 400); });
+      $('#clear-cart').on('click', clearCart);
+      $('#checkout').on('click', ()=> {
+        if(Object.keys(state.cart).length === 0) { alert('Your cart is empty'); return; }
         alert('Checkout - thank you!\n(Checkout in this demo is a placeholder)'); clearCart();
       });
 
-      // modal controls
-      el('close-modal').addEventListener('click',()=>{el('modal').classList.remove('open'); el('modal').setAttribute('aria-hidden','true')});
-      el('inc').addEventListener('click',()=>{state.modalQty++; el('qty').textContent=state.modalQty});
-      el('dec').addEventListener('click',()=>{ if(state.modalQty>1) state.modalQty--; el('qty').textContent=state.modalQty });
-      el('add-to-cart').addEventListener('click',()=>{ addToCart(state.modalProduct.id, state.modalQty); el('modal').classList.remove('open'); el('modal').setAttribute('aria-hidden','true')});
+      $('#close-modal').on('click', ()=> { $('#modal').removeClass('open').attr('aria-hidden','true').hide(); });
+      $('#inc').on('click', ()=> { state.modalQty++; $('#qty').text(state.modalQty); });
+      $('#dec').on('click', ()=> { if(state.modalQty > 1) state.modalQty--; $('#qty').text(state.modalQty); });
+      $('#add-to-cart').on('click', ()=> { addToCart(state.modalProduct.id, state.modalQty); $('#modal').removeClass('open').attr('aria-hidden','true').hide(); });
 
-      // init
+      // Initialize UI
       renderProducts(); renderCart(); updateLiveCount();
     });
   </script>
